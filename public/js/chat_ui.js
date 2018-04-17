@@ -8,9 +8,12 @@ function divSystemContentElement(message){
 
 function processUserInput(chatApp, socket) {
     var message = $('#send-message').val();
+    if(!message.trim()){
+        alert('发送消息不能为空')
+        return false
+    }
     var systemMessage;
-
-    if (message.chatAt(0) === '/') {
+    if (message.charAt(0) === '/') {
         systemMessage = chatApp.processCommand(message);
         if (systemMessage) {
             $('#messages').append((divSystemContenroomtElement(message)));
@@ -53,9 +56,9 @@ $(function(){
 
     // 房间信息
     socket.on('rooms',function(rooms){
+        console.log(rooms)
         $('#room-list').empty()
         for (var room in rooms) {
-            room = room.slice(1,room.length);
             if (room) {
                 $('#room-list').append(divEscapedContentElement(room)); 
             }
@@ -65,20 +68,23 @@ $(function(){
     // 代理切换房间事件
     $('#room-list').on("click",'div', function(){
         var roomName = $(this).text();
+        console.log(roomName)
         chatApp.processCommand('/join '+roomName);
         $('#send-message').focus();
     })
 
     // 定时刷新可用房间列表
     // setInterval(function(){
-    //     socket.emit('rooms');
+        // socket.emit('rooms');
     // },1000);
 
     // 默认锁定输入框
     $('#send-message').focus();
 
     // 默认请求一次
-    $('#send-form').submit(function(){
+    $('#send-button').click(function(){
+        socket.emit('rooms');
+        
         processUserInput(chatApp,socket);
         return false;
     })
