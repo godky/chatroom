@@ -13,6 +13,10 @@ a {
     background: #ddd;
     margin-bottom: 1em;
 }
+#name{
+    color:red;
+    margin-bottom: 1em;
+}
 #message{
     width: 690px;
     height: 300px;
