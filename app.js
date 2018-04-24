@@ -17,7 +17,7 @@ function send500(res) {
     res.end();
 }
 
-function sendfile(res, filePath, fileContents) {
+function sendFile(res, filePath, fileContents) {
     res.writeHead('200',{
         "Content-Type": mime.getType(path.basename(filePath))
     });
@@ -26,14 +26,14 @@ function sendfile(res, filePath, fileContents) {
 
 function serveStatic(res, cache, absPath) {
     if (cache[absPath]) {
-        sendfile(res,absPath,cache[absPath])
+        sendFile(res,absPath,cache[absPath])
     } else {
         fs.readFile(absPath,{encoding:'utf8'},function(err,data){
             if (err) {
                 send404(res);
             } else {
                 cache[absPath] = data;
-                sendfile(res,absPath, data);
+                sendFile(res,absPath, data);
             }
         })
     }
